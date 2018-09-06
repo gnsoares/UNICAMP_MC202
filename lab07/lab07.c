@@ -92,7 +92,7 @@ int main() {
 	if (maze == NULL)
 		exit(1);
 
-	for (i = 0; i < ct; i++) {
+	for (i = 0; i < lt; i++) {
 		maze[i] = malloc(ct * sizeof(char));
 		if (maze[i] == NULL)
 			exit(1);
@@ -111,7 +111,7 @@ int main() {
 		for (j = 0; j < ct; j++)
 			ans[i][j] = ' ';
 	}
-	
+	/*
 	printf("%d %d %d %d %d %d\n", lt, ct, le, ce, ls, cs);
 
 	for (i = 0; i < lt; i++) {
@@ -120,7 +120,7 @@ int main() {
 		}
 		printf("\n");
 	}
-
+	*/
 	if (ansMaze(maze, lt, ct, le, ce, ls, cs, ans, 's'))
 		for (i = 0; i < lt; i++) {
 			for (j = 0; j < ct; j++)
