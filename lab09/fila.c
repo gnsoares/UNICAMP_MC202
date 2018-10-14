@@ -15,6 +15,12 @@ Queue * createQueue() {
 	return new;
 }
 
+void copyQueue(Queue *queue1, Queue *queue2) {
+	NodeQ *current;
+	for (current = queue2->head; current; current = current->next)
+		pushPlayer(queue1, current->player);
+}
+
 void pushPlayer(Queue *queue, Player *player) {
 	NodeQ *new = malloc(sizeof(Queue));
 
@@ -37,6 +43,23 @@ void pushPlayer(Queue *queue, Player *player) {
 	new->next = NULL;
 }
 
+Player * popPlayer(Queue *queue) {
+	Player *player;
+	NodeQ *pop;
+
+	/* Desenfileirar apenas caso não vazia */
+	if (queue->head) {
+		player = queue->head->player;
+		pop = queue->head;
+		queue->head = pop->next;
+		if (!queue->head)
+			queue->tail = NULL;
+		free(pop);
+		return player;
+	}
+	return NULL;	
+}
+
 void getPlayers(Queue *queue, int n) {
 	int i;
 	for (i = 0; i < n; i++)
@@ -50,27 +73,11 @@ void printPoints(Queue *queue) {
 }
 
 void freeQueue(Queue *queue) {
-	NodeQ *currentNode = queue->head; /* Variavel de percorrimento */
-
+	Player *current;
 	/* Percorrimento da lista para liberacao de cada no */
 	while (queue->head) {
-		queue->head = queue->head->next;
-		freePlayer(currentNode->player);
-		free(currentNode);
-		currentNode = queue->head;
+		current = popPlayer(queue);
+		freePlayer(current);
 	}
 	free(queue);
-}
-
-int doAllStand(Queue *queue) {
-	NodeQ * currentNode = queue->head;
-
-	/* Se no minimo um jogador estiver em "Hit", retornar 0 */
-	while (currentNode) {
-		if (currentNode->player->state == 'H')
-			return 0;
-		currentNode = currentNode->next;
-	}
-	/* Caso todos estiverem em "Stand", retornar 1 */
-	return 1;
 }

@@ -21,8 +21,14 @@ typedef struct {
 /* Funcao que cria uma fila vazia e retorna o seu endereco */
 Queue * createQueue();
 
+/* Funcao que copia os dados da queue2 para a queue1 */
+void copyQueue(Queue *queue1, Queue *queue2);
+
 /* Funcao que adiciona um jogador no fim da fila */
 void pushPlayer(Queue *queue, Player *player);
+
+/* Funcao que retira um jogador do inicio da fila */
+Player * popPlayer(Queue *queue);
 
 /* Funcao que inclui n jogadores em uma fila */
 void getPlayers(Queue *queue, int n);
@@ -32,12 +38,5 @@ void printPoints(Queue *queue);
 
 /* Funcao que libera o espaco alocado por uma fila */
 void freeQueue(Queue *queue);
-
-/* Funcao que verifica se todos os jogadores de uma fila ja terminaram suas jogadas;
- * Devolve:
-	* 1 caso afirmativo;
-	* 0 caso negativo;
- */
-int doAllStand(Queue *queue);
 
 #endif

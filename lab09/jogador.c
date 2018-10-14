@@ -55,6 +55,8 @@ int playerPoints(Player *player) {
 
 void freePlayer(Player *player) {
 	/* Liberacao da mao e do jogador */
-	freeStack(player->hand);
-	free(player);
+	if (player) {
+		freeStack(player->hand);
+		free(player);
+	}
 }
