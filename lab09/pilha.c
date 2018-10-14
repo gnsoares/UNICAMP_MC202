@@ -46,14 +46,17 @@ void getCards(Stack *stack, int n) {
 }
 
 void popCard(Stack *stack, char card[MAX_CARD_LENGTH]){
-	NodeS * pop = stack->top;
+	NodeS * pop;
 
-	/* Copia e remocao da carta */
-	strcpy(card, stack->top->card);
-	stack->top = pop->next;
+	if (stack->top) {
+		pop = stack->top;
+		/* Copia e remocao da carta */
+		strcpy(card, stack->top->card);
+		stack->top = pop->next;
 
-	/* Liberar o no porque ele nao sera mais usado */
-	free(pop);
+		/* Liberar o no porque ele nao sera mais usado */
+		free(pop);
+	}
 }
 
 void freeStack(Stack *stack) {
