@@ -1,148 +1,283 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "treap.h"
 
-TreapNode * create_tree(int key, TreapNode *left, TreapNode *right) {
-	TreapNode *root = new_node(key, rand());
-	if (root) {
-		root->left = left;
-		root->right = right;
-	}
-	return root;
+p_treap *treaps = NULL;
+int n_treaps = 0;
+
+/**
+ * Compare strings
+ * @param  node1 node 1
+ * @param  node2 node 2
+ * @return       0 if str1 < str 2, 1 if str1 >= str2
+ */
+static int compare(p_node node1, p_node node2) {
+    return node1->key >= node2->key;
 }
 
-TreapNode * new_node(int key, int priority) {
-	TreapNode *new = malloc(sizeof(TreapNode));
-	if (!new) exit(1);
-	new->key = key;
-	new->priority = priority;
-	new->left = new->right = NULL;
-	return new;
+/**
+ * is equal
+ * @param  node1 node 1
+ * @param  node2 node 2
+ * @return       1 if equal 0 if not
+ */
+static int equals(p_node node1, p_node node2) {
+    if (node1 == NULL || node2 == NULL)
+        return 0;
+    return node1->key == node2->key;
 }
 
-TreapNode * rotate_right(TreapNode *root) {
-    TreapNode *r2 = root->left;
+/**
+ * has left
+ * @param  node node to be checked
+ * @return      1 if does, 0 otherwise
+ */
+static int has_left(p_node node) {return node->left != NULL;}
 
-    root->left = r2->right;
-    r2->right = root;
-    return r2;
+/**
+ * has right
+ * @param  node node to be checked
+ * @return      1 if does, 0 otherwise
+ */
+static int has_right(p_node node) {return node->right != NULL;}
+
+/**
+ * min in relation to node
+ * @param  node node to be evaluated
+ * @return      node to the furthest left
+ */
+static p_node min(p_node root) {
+    if (root == NULL)
+        return root;
+    while (has_left(root))
+        root = root->left;
+    return root;
 }
 
-TreapNode * rotate_left(TreapNode *root) {
-    TreapNode *r2 = root->right;
-
-    root->right = r2->left;
-    r2->left = root;
-    return r2;
+/**
+ * max in relation to node
+ * @param  node node to be evaluated
+ * @return      node to the furthest right
+ */
+static p_node max(p_node root) {
+    if (root == NULL)
+        return root;
+    while (has_right(root))
+        root = root->right;
+    return root;
 }
 
-/* Recursive implementation of insertion in Treap */
-TreapNode * insert(TreapNode* root, int key)  { 
-	// If root is NULL, create a new node and return it 
-	if (!root) 
-		return new_node(key, rand());
+/**
+ * is empty
+ * @param  treap tree to be checked
+ * @return     1 if empty, 0 otherwise
+ */
+static int is_empty(p_treap treap) {return treap->root == NULL;}
 
-	// If key is smaller than root 
-	if (key <= root->key) { 
-		// Insert in left subtree 
-		root->left = insert(root->left, key); 
-
-		// Fix Heap property if it is violated 
-		if (root->left->priority > root->priority) 
-			root = rotate_right(root); 
-	} else {// If key is greater 
-		// Insert in right subtree 
-		root->right = insert(root->right, key); 
-
-		// Fix Heap property if it is violated 
-		if (root->right->priority > root->priority) 
-			root = rotate_left(root); 
-	}
-	return root; 
+/**
+ * create node
+ * @param  value node value
+ * @return       pointer to new node
+ */
+static p_node create_node(long int key) {
+    p_node new = malloc(sizeof(struct Node));
+    new->key = key;
+    new->priority = rand();
+    new->left = NULL;
+    new->right = NULL;
+    return new;
 }
 
+/*
+ * rotate right
+ * @param   node to be rotated
+ * @return      rotate tree
+ */
+static p_node rotate_right(p_node A) {
+    p_node B = A->left;
 
-void swap(TreapNode **r1, TreapNode **r2) {
-	TreapNode *t = *r1;
-	*r1 = *r2;
-	*r2 = t;
+    A->left = B->right;
+    B->right = A;
+    return B;
 }
 
-TreapNode * split(TreapNode **less, TreapNode **gtr, TreapNode *r, int key) {
+/*
+ * rotate left
+ * @param   node to be rotated
+ * @return      rotate tree
+ */
+static p_node rotate_left(p_node B) {
+    p_node A = B->right;
 
-	TreapNode *root;
-	if (r == NULL) {
-		*less = *gtr = NULL;
-		return NULL;
-	}
-
-	root = new_node(r->key, r->priority);
-	if (r->key < key) {
-		*less = root;
-		return split(&(root->right), gtr, r->right, key);
-	} else if (r->key > key) {
-		*gtr = root;
-		return split(less, &(root->left), r->left, key);
-	} else {
-		*less = r->left;
-		*gtr = r->right;
-		return root;
-	}
+    B->right = A->left;
+    A->left = B;
+    return A;
 }
 
-TreapNode * join(TreapNode *r1, TreapNode *r2) {
-
-	TreapNode *root;
-
-	if (r1 == NULL) return r2;
-	if (r2 == NULL) return r1;
-
-	if (r1->priority < r2->priority) {
-		root = new_node(r1->key, r1->priority);
-		root->left = r1->left;
-		root->right = join(r1->right, r2);
-	} else {
-		root = new_node(r2->key, r2->priority);
-		root->left = join(r1, r2->left);
-		root->right = r1->right;
-	}
-	return root;
+/**
+ * insert new node
+ * @param root root
+ * @param node    node to be inserted
+ */
+static p_node insert_new(p_node root, p_node node) {
+    if (root == NULL)
+        return node;
+    if (compare(root, node)) {
+        root->left = insert_new(root->left, node);
+        if (root->left->priority > root->priority)
+            root = rotate_right(root);
+    }
+    else {
+        root->right = insert_new(root->right, node);
+        if (root->right->priority > root->priority)
+            root = rotate_left(root);
+    }
+    return root;
 }
 
-TreapNode * diff(TreapNode *r1, TreapNode *r2, int r2_is_subtr) {
-	TreapNode *root, *less, *gtr, *left, *right, *duplicate;
-	if ((r1 == NULL) || (r2 == NULL))
-		return r2_is_subtr ? r1 : r2;
-	if (r1->priority < r2->priority) {
-		r2_is_subtr = !r2_is_subtr;
-		swap(&r1, &r2);
-	}
-	duplicate = split(&less, &gtr, r2, r1->key);
-	left = diff(r1->left, less, r2_is_subtr);
-	right = diff(r1->right, gtr, r2_is_subtr);
-	/* Keep r1 if no dupl. and subtracting r2 */
-	if ((duplicate == NULL) && r2_is_subtr) {
-		root = new_node(r1->key, r1->priority);
-		root->left = left;
-		root->right = right;
-		return root;
-	} else { /* Delete r1 */
-		return join(left, right);
-	}
+/**
+ * find node
+ * @param  root current root
+ * @param  node node to be found (by value, not reference)
+ * @return      pointer to equivalent node inside tree
+ */
+static p_node find_node(p_node root, p_node node) {
+    while (root != NULL && !equals(root, node)) {
+        if (compare(root, node))
+            root = root->left;
+        else
+            root = root->right;
+    }
+    return root;
 }
 
-TreapNode * union(TreapNode *r1, TreapNode *r2) {
-	TreapNode *root, *less, *gtr, *duplicate;
+/**
+ * delete node from tree
+ * @param  root root of the tree
+ * @param  node node to be deleted
+ * @return      root of the new tree
+ */
+static p_node delete_node(p_node root, p_node node) {
+    p_node temp;
 
-	if (r1 == NULL) return r2;
-	if (r2 == NULL) return r1;
+    if (root == NULL)
+        return root;
+    if (root != node) {
+        if (compare(root, node))
+            root->left = delete_node(root->left, node);
+        else
+            root->right = delete_node(root->right, node);
+    }
+    else if (!has_right(root)) {
+        temp = root->left;
+        free(root);
+        root = temp;
+    }
+    else if (!has_left(root)) {
+        temp = root->right;
+        free(root);
+        root = temp;
+    }
+    else if (root->left->priority < root->right->priority) {
+        root = rotate_left(root);
+        root->left = delete_node(root->left, node);
+    }
+    else {
+        root = rotate_right(root);
+        root->right = delete_node(root->right, node);
+    }
+    return root;
+}
 
-	if (r1->priority < r2->priority)
-		swap(&r1, &r2);
-	duplicate = split(&less, &gtr, r2, r1->key);
+/**
+ * create tree
+ * @return  pointer to tree
+ */
+p_treap create_treap(void) {
+    p_treap treap = malloc(sizeof(Treap));
+    p_treap *tmp = realloc(treaps, sizeof(Treap) * (n_treaps + 1));
+    srand(time(NULL));
+    treaps = tmp;
+    treaps[n_treaps] = treap;
+    n_treaps++;
+    treap->root = NULL;
+    return treap;
+}
 
-	root = new_node(r1->key, r1->priority);
-	root->left = union(r1->left, less);
-	root->right = union(r1->right, gtr);
-	return root;
+/**
+ * push to tree
+ * @param treap     tree
+ * @param key   key to be pushed
+ */
+void push(p_treap treap, long int key) {
+    p_node new = create_node(key);
+    if (is_empty(treap)) {
+        treap->root = new;
+        return;
+    }
+    treap->root = insert_new(treap->root, new);
+}
+
+/**
+ * search tree
+ * @param  treap   tree
+ * @param  value value to be found
+ * @return       pointer to found node
+ */
+p_node search(p_treap treap, long int key) {
+    p_node tmp = create_node(key);
+    p_node node = find_node(treap->root, tmp);
+    free(tmp);
+    return node;
+}
+
+/**
+ * get min
+ * @param  treap  tree
+ * @return      node with lowest key
+ */
+p_node get_min(p_treap treap) {
+    return min(treap->root);
+}
+
+/**
+ * get max
+ * @param  treap  tree
+ * @return      node with max key
+ */
+p_node get_max(p_treap treap) {
+    return max(treap->root);
+}
+
+/**
+ * pop
+ * @param treap  tree
+ * @param node node to be removed
+ */
+void pop(p_treap treap, p_node node) {
+    p_node tmp;
+    tmp = delete_node(treap->root, node);
+    treap->root = tmp;
+}
+
+/**
+ * Frees a treap using DFS
+ * @param node node of treap to free
+ */
+void free_treap(p_node node) {
+    if (node == NULL)
+        return;
+    free_treap(node->left);
+    free_treap(node->right);
+    free(node);
+}
+
+/**
+ * Frees all initialized treaps
+ */
+void free_treaps(void) {
+    int i;
+    for (i = 0; i < n_treaps; i++) {
+        free_treap(treaps[i]->root);
+        free(treaps[i]);
+    }
+    free(treaps);
 }
