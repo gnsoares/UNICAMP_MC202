@@ -1,21 +1,73 @@
 #ifndef TREAP_H
 #define TREAP_H
 
-typedef struct treap_node {
-	int key, priority;
-	struct treap_node *left, *right;
-} TreapNode;
+#include <stdlib.h>
+#include <time.h>
 
-/* Funcao que cria uma arvore. Tem como parametros:
- 	* String da raiz;
- 	* Endereco da subarvore esquerda;
- 	* Endereco da subarvore direita;
+struct Node {
+    struct Node * left;
+    struct Node * right;
+    long int key;
+    int priority;
+};
+
+typedef struct Node * p_node;
+
+typedef struct {
+    p_node root;
+} Treap;
+
+typedef Treap * p_treap;
+
+
+extern p_treap *treaps;
+extern int n_treaps;
+
+/**
+ * create tree
+ * @return  pointer to tree
  */
-TreapNode * create_tree(int x, TreapNode *left, TreapNode *right);
+p_treap create_treap(void);
 
-TreapNode * join(TreapNode *r1, TreapNode *r2);
+/**
+ * push to tree
+ * @param treap   tree
+ * @param key key to be pushed
+ */
+void push(p_treap treap, long int key);
 
-/* Funcao que libera o espaco alocado por uma arvore binaria */
-void free_tree(TreapNode *root);
+/**
+ * search tree
+ * @param  treap   tree
+ * @param  value value to be found
+ * @return       pointer to found node
+ */
+p_node search(p_treap treap, long int key);
+
+/**
+ * get min
+ * @param  treap  tree
+ * @return      node with lowest key
+ */
+p_node get_min(p_treap treap);
+
+/**
+ * get max
+ * @param  treap  tree
+ * @return      node with max key
+ */
+p_node get_max(p_treap treap);
+
+/**
+ * pop
+ * @param treap  tree
+ * @param node node to be removed
+ */
+void pop(p_treap treap, p_node node);
+
+/**
+ * Frees all initialized treaps
+ */
+void free_treaps(void) __attribute__((destructor));
 
 #endif
