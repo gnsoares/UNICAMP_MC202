@@ -1,6 +1,8 @@
+# Outputs
 *.out
 *.o
-*.zip
+
+# Executables
 lab01
 lab02
 lab03
@@ -16,3 +18,6 @@ lab12
 lab13
 lab14
 lab15
+
+# Auxiliar files
+*.zip
