@@ -77,17 +77,17 @@ int main() {
 	/* Variaveis para armazenar os nomes dos autores */
 	char name1[MAX_NAMES_LEN/2+1], name2[MAX_NAMES_LEN/2+1];
 	/* A lista dos autores de um certo artigo e armazenada em uma lista ligada */
-	list_node_t *list = NULL;
+	list_node_t *list;
 	/* Inicializacao da tabela */
 	hashtable_t *hashtable = ht_create();
 
 	/* Leitura e construcao da tabela de espalhamento */
 	scanf("%d %d", &n_papers, &n_requests);
 	for (i = 0; i < n_papers; i++) {
+		list = NULL;
 		list = build_author_list();
 		ht_set_collab(hashtable, list);
 		list_free(list);
-		list = NULL;
 	}
 
 	/* Verificacao das consultas feitas */
