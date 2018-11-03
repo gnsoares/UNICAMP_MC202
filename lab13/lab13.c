@@ -84,7 +84,6 @@ int main() {
 	/* Leitura e construcao da tabela de espalhamento */
 	scanf("%d %d", &n_papers, &n_requests);
 	for (i = 0; i < n_papers; i++) {
-		list = NULL;
 		list = build_author_list();
 		ht_set_collab(hashtable, list);
 		list_free(list);
