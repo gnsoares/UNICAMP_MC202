@@ -1,10 +1,3 @@
-/* MC202 Estruturas de Dados - Laboratorio 01: Diferenca Simetrica
- * 	Nome: Gustavo Nascimento Soares
- * 	RA: 217530
- * 	Programa que le dois conjuntos de inteiros e imprime o conjunto
- * 	solucao da operacao diferenca simetrica entre esses conjuntos
- */
-
 #include <stdio.h>
 
 void printArrayInt(int arr[], int size) {
