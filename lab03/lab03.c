@@ -1,9 +1,3 @@
-/* MC202 Estruturas de Dados - Laboratorio 03: Calculadora de Strings
- * 	Nome: Gustavo Nascimento Soares
- * 	RA: 217530
- * 	Programa que executa operacoes com string como uma calculadora
- */
-
 #include <stdio.h>
 
 #define MAX_LENGTH 100
