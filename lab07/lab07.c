@@ -1,10 +1,3 @@
-/* MC202 Estruturas de Dados - Laboratorio 07: Labirinto
- * 	Nome: Gustavo Nascimento Soares
- * 	RA: 217530
- * 	Programa que le um labirinto do teclado e imprime a sua
- * 	saida usando um algoritmo de backtracking para encontra-la
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 
