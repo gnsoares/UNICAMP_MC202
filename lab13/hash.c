@@ -69,6 +69,9 @@ void ht_set(hashtable_t *hashtable, char *key, int value) {
 			&& i < MAX)
 		index = ht_hash(key, ++i);
 
+	/* Se nao houver nenhuma posicao disponivel */
+	if (i == MAX) return;
+
 	/* Alterar o valor com o indice correto */
 	strcpy(hashtable->table[index].key, key);
 	hashtable->table[index].bool_collab = value;
@@ -84,6 +87,9 @@ int ht_get(hashtable_t *hashtable, char *key) {
 			&& strcmp(hashtable->table[index].key, key)
 			&& i < MAX)
 		index = ht_hash(key, ++i);
+
+	/* Se nao houver nenhuma posicao disponivel */
+	if (i == MAX) return 0;
 
 	return hashtable->table[index].bool_collab;
 }

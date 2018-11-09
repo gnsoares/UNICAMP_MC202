@@ -40,13 +40,13 @@ list_node_t *build_author_list(void) {
 /* Inclui em uma tabela de espalhamento as colaboracoes entre autores */
 void ht_set_collab(hashtable_t *hashtable, list_node_t *list) {
 
-	char collab[MAX_NAMES_LEN+3];
+	char collab[MAX_NAMES_LEN+2];
 	list_node_t *curr1, *curr2;
 
 	for (curr1 = list; curr1; curr1 = curr1->next)
 		for (curr2 = curr1->next; curr2; curr2 = curr2->next)
 			if (curr1 != curr2) {
-				sprintf(collab, "%s, %s", curr1->key, curr2->key);
+				sprintf(collab, "%s,%s", curr1->key, curr2->key);
 				ht_set(hashtable, collab, 1);
 			}
 }
@@ -63,10 +63,10 @@ void request_name(char name[MAX_NAMES_LEN/2+1]) {
 /* Com os nomes de dois autores, procura na tabela de espalhamento se os dois ja colaboraram */
 int ht_get_collab(hashtable_t *hashtable, char *author1, char *author2) {
 
-	char request1[MAX_NAMES_LEN+3], request2[MAX_NAMES_LEN+3];
+	char request1[MAX_NAMES_LEN+2], request2[MAX_NAMES_LEN+2];
 
-	sprintf(request1, "%s, %s", author1, author2);
-	sprintf(request2, "%s, %s", author2, author1);
+	sprintf(request1, "%s,%s", author1, author2);
+	sprintf(request2, "%s,%s", author2, author1);
 
 	return (ht_get(hashtable, request1) || ht_get(hashtable, request2));
 }
@@ -77,7 +77,7 @@ int main() {
 	/* Variaveis para armazenar os nomes dos autores */
 	char name1[MAX_NAMES_LEN/2+1], name2[MAX_NAMES_LEN/2+1];
 	/* A lista dos autores de um certo artigo e armazenada em uma lista ligada */
-	list_node_t *list;
+	list_node_t *list = NULL;
 	/* Inicializacao da tabela */
 	hashtable_t *hashtable = ht_create();
 

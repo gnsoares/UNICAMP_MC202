@@ -1,15 +1,16 @@
 #ifndef HASH_H
 #define HASH_H
 
-#define MAX 3037
+#define MAX 2039
 #define MAX_NAMES_LEN 42
-#define PRIME 3023
+#define PRIME 2029
 
 /* Interface de uma TABELA DE ESPALHAMENTO implementada usando vetores */
 
 typedef struct entry_s {
-	/* A chave e o nome de dois autores. O valor e 1 se ja colaboraram, senao 0 */
+	/* Chave: nome de dois autores separado por virgula */
 	char key[MAX_NAMES_LEN];
+	/* Valor: 1 se ja colaboraram, senao 0 */
 	int bool_collab;
 } entry_t;
 
