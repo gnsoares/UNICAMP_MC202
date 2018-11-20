@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "grafo.h"
+#include <time.h>
+
+#define DEBUG 1
+
+int main()
+{
+	int i, j, k, n_students, n_groups, *v, **links;
+	graph_t *groups_graph;
+
+	/*clock_t start, end;*/
+
+	scanf("%d %d", &n_students, &n_groups);
+	groups_graph = graph_create(n_students);
+	links = malloc(n_students * sizeof(int *));
+	if (!links) exit(1);
+	for (i = 0; i < n_students; i++) {
+		links[i] = malloc(n_students * sizeof(int));
+		if (!links[i]) exit(1);
+	}
+	for (i = 0; i < n_students; i++)
+		for (j = 0; j < n_students; j++)
+			links[i][j] = (i == j) ? 1 : -1;
+	printf("n = %d\n", n_students);
+
+	v = malloc(n_students * sizeof(int));
+	if (!v) exit(1);
+	for (i = 0; i < n_groups; i++) {
+		scanf("%d", &n_students);
+		for (j = 0; j < n_students; j++)
+			scanf("%d", &v[j]);
+		for (j = 0; j < n_students; j++)
+			for (k = j+1; k < n_students; k++)
+				graph_edge_insert(groups_graph, v[j], v[k]);
+	}
+
+	for (i = 0; i < groups_graph->n_v; i++)
+		for (j = i+1; j < groups_graph->n_v ; j++)
+			if (links[i][j] == -1)
+				links[j][i] = links[i][j] = graph_bfs(groups_graph, links, i, j);
+	
+	for (i = 0; i < groups_graph->n_v; i++) {
+		for (j = 0; j < groups_graph->n_v; j++)
+			if (links[i][j] == 0)
+				printf("%d ", j);
+		printf("\n");
+	}
+
+	free(v);
+	printf("rodou\n");
+	return 0;
+}
