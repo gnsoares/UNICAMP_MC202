@@ -132,23 +132,12 @@ void queue_free(queue_t *queue) {
 	free(queue);
 }
 
-void print_mat(int **mat, int size) {
-	int i, j;
-	for (i = 0; i < size; i++) {
-		for (j = 0; j < size; j++)
-			printf("%d ", mat[i][j]);
-		printf("\n");
-	}
-}
-
-int graph_bfs(graph_t *graph, int **mat, int source, int destination) {
-	int found = 0, i;
+int graph_bfs(graph_t *graph, int source, int destination) {
+	int i, found = 0;
 	int *visit = malloc(graph->n_v * sizeof(int));
 	list_node_t *curr;
 	queue_t *queue = queue_create();
 	
-	/*static int count = 0;
-	printf("%d: ", ++count);*/
 	for (i = 0; i < graph->n_v; i++)
 		visit[i] = 0;
 
@@ -167,8 +156,20 @@ int graph_bfs(graph_t *graph, int **mat, int source, int destination) {
 	}
 	queue_free(queue);
 
-	print_mat(mat, graph->n_v); printf("\n");
-
 	free(visit);
 	return found;
+}
+
+int graph_distance(graph_t *graph, int source, int destination) {
+	int *pred, *dist, *path;
+	int n_pred = 0, n_dist = 0, n_path = 0;
+	int crawl = dest;
+
+	pred = malloc(graph->n_v * sizeof(int));
+	dist = malloc(graph->n_v * sizeof(int));
+	path = malloc(graph->n_v * sizeof(int));
+
+
+
+	free(pred); free(dist); free(path);
 }
