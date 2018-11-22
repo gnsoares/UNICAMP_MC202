@@ -1,6 +1,7 @@
-#include "grafo.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
+#include "grafo.h"
 
 list_node_t *list_add(list_node_t *list, int x) {
 	list_node_t *new = malloc(sizeof(list_node_t));
@@ -41,6 +42,7 @@ graph_t *graph_create(int n_v) {
 }
 
 void graph_edge_insert(graph_t *graph, int u, int v) {
+	if (has_edge(graph, u, v)) return;
 	graph->adj[u] = list_add(graph->adj[u], v);
 	graph->adj[v] = list_add(graph->adj[v], u);
 }
@@ -52,6 +54,7 @@ void graph_edge_remove(graph_t *graph, int u, int v) {
 
 int has_edge(graph_t *graph, int u, int v) {
 	list_node_t *curr;
+	if (u == v) return 1;
 	for (curr = graph->adj[u]; curr; curr = curr->next)
 		if (curr->value == v)
 			return 1;
@@ -132,44 +135,83 @@ void queue_free(queue_t *queue) {
 	free(queue);
 }
 
-int graph_bfs(graph_t *graph, int source, int destination) {
-	int i, found = 0;
+/*int graph_bfs(graph_t *graph, int **mat, int source, int destination) {
+	int i, found = 0, len = 0;
 	int *visit = malloc(graph->n_v * sizeof(int));
+	int *dist = malloc(graph->n_v * sizeof(int));
 	list_node_t *curr;
 	queue_t *queue = queue_create();
 	
-	for (i = 0; i < graph->n_v; i++)
+	for (i = 0; i < graph->n_v; i++) {
 		visit[i] = 0;
-
+		dist[i] = 98;
+	}
+	dist[source] = 0;
 	queue_queue(queue, source);
 	while (!queue_is_empty(queue)) {
 		i = queue_dequeue(queue);
 		if (i == destination) {
 			found = 1;
-			break;
 		}
 		if (visit[i] == 1)
 			continue;
 		visit[i] = 1;
-		for (curr = graph->adj[i]; curr; curr = curr->next)
+		for (curr = graph->adj[i]; curr; curr = curr->next) {
+			if (dist[curr->value] == 98 || dist[curr->value] > dist[i] + 1) dist[curr->value] = dist[i] + 1;
 			queue_queue(queue, curr->value);
+		}
 	}
-	queue_free(queue);
 
-	free(visit);
-	return found;
+	queue_free(queue);
+	len = dist[destination];
+	free(visit); free(dist);
+	print_mat(mat, graph->n_v); printf("\n");
+	if (found) return len;
+	return 0;
+}*/
+
+void graph_bfs(graph_t *graph, int s) {
+	int w, v;
+	int *pai = malloc(graph->n_v * sizeof(int));
+	int *visitado = malloc(graph->n_v * sizeof(int));
+	queue_t *f = queue_create();
+	list_node_t *node;
+
+	for (v = 0; v < graph->n_v; v++) {
+		pai[v] = -1;
+		visitado[v] = 0;
+	}
+
+	queue_queue(f,s);
+	pai[s] = s;
+	visitado[s] = 1;
+	while (!queue_is_empty(f)) {
+		v = queue_dequeue(f);
+		for (w = 0, node = graph->adj[v]; w < graph->n_v && node; w++, node = node->next)
+			if (node && !visitado[w]) {
+				visitado[w] = 1;/* evita repetição na fila */
+				pai[w] = v;
+				queue_queue(f, w);
+			}
+	}
+	queue_free(f);
+	free(visitado);
+	for (v = 0; v < graph->n_v; v++) {
+		if (pai[v] != -1)
+			printf("%d ", pai[v]);
+	}
+	printf("\n");
+	/*return pai;*/
 }
 
-int graph_distance(graph_t *graph, int source, int destination) {
-	int *pred, *dist, *path;
-	int n_pred = 0, n_dist = 0, n_path = 0;
-	int crawl = dest;
-
-	pred = malloc(graph->n_v * sizeof(int));
-	dist = malloc(graph->n_v * sizeof(int));
-	path = malloc(graph->n_v * sizeof(int));
-
-
-
-	free(pred); free(dist); free(path);
+void print_mat(int **mat, int size) {
+	int i, j;
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size; j++)
+			if (mat[i][j] > 9)
+				printf("%d|", mat[i][j]);
+			else
+				printf(" %d|", mat[i][j]);
+		printf("\n");
+	}
 }

@@ -17,9 +17,12 @@ graph_t *graph_create(int n_v);
 void graph_edge_insert(graph_t *graph, int u, int v);
 void graph_edge_remove(graph_t *graph, int u, int v);
 int has_edge(graph_t *graph, int u, int v);
-int graph_bfs(graph_t *graph, int source, int destination);
+void graph_bfs(graph_t *graph, int s);
 int graph_distance(graph_t *graph, int source, int destination);
 void print_edges(graph_t *graph);
 void graph_free(graph_t *graph);
+
+
+void print_mat(int **mat, int size);
 
 #endif
