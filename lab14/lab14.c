@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define DEBUG 0
-
+/* Verificacao se um grupo de 3 pessoas esta entediado */
 int is_bored(int age1, int age2, int age3) {
 	double average = ( (double) (age1 + age2 + age3) ) / 3;
 	if (average > 2*age1 || average > 2*age2 || average > 2*age3)
@@ -11,6 +10,7 @@ int is_bored(int age1, int age2, int age3) {
 	return 0;
 }
 
+/* Verificacao se um elemento esta em um vetor */
 int in(int *v, int max, int x) {
 	int i;
 	for (i = 0; i < max; i++)

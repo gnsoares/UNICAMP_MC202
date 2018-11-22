@@ -45,25 +45,12 @@ void graph_edge_insert(graph_t *graph, int u, int v) {
 	graph->adjacency[v] = list_add(graph->adjacency[v], u);
 }
 
-void graph_edge_remove(graph_t *graph, int u, int v) {
-	graph->adjacency[u] = list_remove(graph->adjacency[u], v);
-	graph->adjacency[v] = list_remove(graph->adjacency[v], u);	
-}
-
 int has_edge(graph_t *graph, int u, int v) {
 	list_node_t *curr;
 	for (curr = graph->adjacency[u]; curr; curr = curr->next)
 		if (curr->value == v)
 			return 1;
 	return 0;
-}
-
-void print_edges(graph_t *graph) {
-	int u;
-	list_node_t *t;
-	for (u = 0; u < graph->n_v; u++)
-		for (t = graph->adjacency[u]; t != NULL; t = t->next)
-			printf("{%d,%d}\n", u, t->value);
 }
 
 void graph_free(graph_t *graph) {
