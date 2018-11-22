@@ -1,6 +1,4 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
 #include "grafo.h"
 
 graph_t *graph_create(int n_v) {

@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
 #include "grafo.h"
 
 /* Verificacao se um elemento esta em um vetor */
