@@ -11,10 +11,9 @@ graph_t *graph_create(int n_v) {
 	for (i = 0; i < n_v; i++) {
 		graph->adj[i] = malloc(n_v *sizeof(int));
 		if (!graph->adj[i]) exit(1);
-	}
-	for (i = 0; i < n_v; i++)
 		for (j = 0; j < n_v; j++)
 			graph->adj[i][j] = 0;
+	}
 	return graph;
 }
 
