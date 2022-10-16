@@ -1,0 +1,10 @@
+favores 1421.46
+valvula 3215.94
+chartonista 0.00
+borda 33897.60
+berradeiras 7623.48
+lagrima 6730.56
+oferta 0.00
+marco 10140.82
+intimado 3100.40
+tanoaria 5122.00

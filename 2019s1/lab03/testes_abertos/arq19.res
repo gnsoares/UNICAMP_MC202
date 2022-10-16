@@ -1,0 +1,10 @@
+natalicios 0.00
+ofereco 15042.06
+tarqüinio 1935.63
+contemporaneas 6219.50
+sucessos 22459.16
+ungido 6665.58
+general 411.18
+rome 365.20
+escrivania 0.00
+tenues 3008.33

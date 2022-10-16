@@ -1,0 +1,10 @@
+abacate 42.70
+baunilha 48.00
+chocolate 21.00
+creme 58.68
+farinha 55.50
+hortela 24.75
+leite 102.00
+nesquik 71.20
+ovos 14.40
+xarope 90.00

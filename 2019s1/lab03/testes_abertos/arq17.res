@@ -1,0 +1,15 @@
+abafam 23117.85
+fiei 0.00
+empenhados 0.00
+immortelles 0.00
+galatas 66384.03
+rolam 0.00
+aliado 382.22
+seducao 4288.40
+apaixonada 7183.98
+muxoxo 0.00
+devolver 0.00
+rubini 6747.78
+entreolharam 25908.70
+abracara 8977.43
+polida 48578.40

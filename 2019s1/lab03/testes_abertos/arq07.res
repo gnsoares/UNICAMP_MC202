@@ -1,0 +1,15 @@
+ursos 22877.24
+precursora 0.00
+cercadas 0.00
+baunilha 0.00
+maximo 29861.56
+bicadas 0.00
+descalcadeira 6630.60
+capitulo 5788.16
+plebeias 0.00
+cintilante 0.00
+petram 0.00
+aproveitadas 0.00
+inextrincaveis 0.00
+educada 43551.90
+encobririam 0.00

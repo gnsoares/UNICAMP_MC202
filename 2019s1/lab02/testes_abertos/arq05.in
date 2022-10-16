@@ -1,0 +1,3 @@
+Aquisicao de Recurso e Inicializacao (conhecido pelo acronimo RAII para o termo em lingua inglesa Resource Acquisition Is Initialization) e um padrao de projeto de software para CPP, D e Rust que combina a aquisicao e liberacao de recursos com inicializacao e destruicao de objetos. Segundo a RAII, o uso de memoria de um objeto inicia-se na sua declaracao, e termina quando o objeto sai do escopo, seja porque a execucao chegou ao final do bloco, ou porque uma excecao foi lancada. A liberacao de memoria e possivel atraves do uso dos metodos destrutores da classe – a liberacao da memoria no destrutor garante que ela será realizada em qualquer caminho que o fluxo seguir, tornando o codigo seguro.
+5
+117 12 27 19 118
